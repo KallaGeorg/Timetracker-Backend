@@ -11,4 +11,6 @@ import com.Timetracker.TimetrackerBackend.Models.User;
 public interface UserRepository extends MongoRepository<User, String> {
     Optional <User> findByUsernameAndPassword(String username, String password);
     User findByUsername(String username);
+
+    
 }

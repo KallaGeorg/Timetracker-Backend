@@ -1,6 +1,7 @@
 package com.Timetracker.TimetrackerBackend.Models;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,13 +20,13 @@ public class User {
    
 
     public User() {
-        
+        this.id = UUID.randomUUID().toString();  
     }
 
 
-    public User(String id, String firstname, String lastname, String email, String username, String password,
+    public User( String firstname, String lastname, String email, String username, String password,
             List<Activity> activities) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -35,14 +36,7 @@ public class User {
     }
 
 
-    public String getId() {
-        return id;
-    }
-
-
-    public void setId(String id) {
-        this.id = id;
-    }
+ 
 
 
     public String getFirstname() {
@@ -102,6 +96,16 @@ public class User {
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 
