@@ -3,7 +3,7 @@ package com.Timetracker.TimetrackerBackend.Models;
 import org.springframework.data.annotation.Id;
 
 
-import ch.qos.logback.core.util.Duration;
+
 
 
 public class Activity {
@@ -11,14 +11,14 @@ public class Activity {
     @Id
     private String id;
     private String name;
-    private Duration duration;
+    private long duration;
   
 
     public Activity() {
         
     }
 
-    public Activity(String id, String name, Duration duration) {
+    public Activity(String id, String name, long duration) {
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -41,11 +41,11 @@ public class Activity {
         this.name = name;
     }
 
-    public Duration getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
