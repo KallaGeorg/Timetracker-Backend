@@ -1,5 +1,6 @@
 package com.Timetracker.TimetrackerBackend.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,10 +33,12 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.activities = activities;
+        this.activities = new ArrayList<>();
     }
 
-
+ public void addActivity(Activity activity) {
+     activities.add(activity);
+ }
  
 
 
