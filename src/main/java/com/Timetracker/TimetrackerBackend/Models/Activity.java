@@ -1,5 +1,6 @@
 package com.Timetracker.TimetrackerBackend.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,10 +26,14 @@ public class Activity {
     public Activity(String name, List<Interval> intervals) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
-        this.intervals = intervals;
+        this.intervals = new ArrayList<>();
     }
-
-
+    public void addInterval(Interval interval) {
+        if (intervals == null) {
+            intervals = new ArrayList<>();
+        }
+        intervals.add(interval);
+    }
     public String getId() {
         return id;
     }

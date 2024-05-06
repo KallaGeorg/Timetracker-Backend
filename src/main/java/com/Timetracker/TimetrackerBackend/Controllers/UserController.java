@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Timetracker.TimetrackerBackend.Models.Activity;
+import com.Timetracker.TimetrackerBackend.Models.Interval;
 import com.Timetracker.TimetrackerBackend.Models.User;
 import com.Timetracker.TimetrackerBackend.Models.UserLoginRequest;
 import com.Timetracker.TimetrackerBackend.Repositories.UserRepository;
@@ -51,7 +52,6 @@ public class UserController {
        if(userOptional.isPresent()) {
         User user = userOptional.get();
         List<Activity> activities = user.getActivities();
-        System.out.println("Activities: " + activities);
         return activities;
     }
     else{
@@ -72,15 +72,32 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
     
     User user = userService.getUserByUserName(loginRequest.getUsername());
 
-    
     if(user != null && user.getPassword().equals(loginRequest.getPassword())){
-
         return new ResponseEntity<>(user, HttpStatus.OK);
+
     } else {
-        
         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
     }
 }
+     @PatchMapping("/user/{userId}/activities/{activityId}/intervals")
+     public Interval  saveInterval(@PathVariable String userId, @PathVariable String activityId, @RequestBody Interval interval) {
+       User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")); 
+       Activity activity = user.getActivities().stream()
+       .filter(act ->  activityId.equals(act.getId()))
+       .findFirst() 
+       .orElseThrow(()-> new IllegalArgumentException("Activity not found"));
+
+       List<Interval> intervals = activity.getIntervals();
+       if (intervals == null) {
+           throw new IllegalArgumentException("Activity intervals list is null");
+       }
+
+       activity.addInterval(interval);
+       userRepository.save(user);
+
+       return interval;
+     }
+    
      @PatchMapping("/user/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody User userUpdates) {
         try {
@@ -108,4 +125,13 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user");
         }
     }
+
+   
+
 }
+
+        
+
+
+
+
