@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.Timetracker.TimetrackerBackend.Models.Activity;
+import com.Timetracker.TimetrackerBackend.Models.ActivitySumResponse;
 import com.Timetracker.TimetrackerBackend.Models.Interval;
 import com.Timetracker.TimetrackerBackend.Models.User;
 import com.Timetracker.TimetrackerBackend.Models.UserLoginRequest;
@@ -59,6 +60,32 @@ public class UserController {
     }
 }
 
+    @GetMapping("/user/{userId}/activities/{activityId}/intervals/sum")
+    public ResponseEntity<Object> getActivityIntervalsSum(@PathVariable String userId, @PathVariable String activityId) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            Activity activity = user.getActivities().stream()
+                .filter(act -> activityId.equals(act.getId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Activity not found"));
+    
+           
+            long sumSeconds = activity.getIntervals().stream().mapToLong(Interval::getSeconds).sum();
+            long sumMinutes = activity.getIntervals().stream().mapToLong(Interval::getMinutes).sum();
+            long sumHours = activity.getIntervals().stream().mapToLong(Interval::getHours).sum();
+    
+            ActivitySumResponse activitySumResponse = new ActivitySumResponse();
+            activitySumResponse.setActivityName(activity.getName());
+            activitySumResponse.setSumHours(sumHours);
+            activitySumResponse.setSumMinutes(sumMinutes);
+            activitySumResponse.setSumSeconds(sumSeconds);
+    
+            return ResponseEntity.ok(activitySumResponse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
 
     @PostMapping("/user")
     public User addUser(@RequestBody User user) {
@@ -79,24 +106,7 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
     }
 }
-     @PatchMapping("/user/{userId}/activities/{activityId}/intervals")
-     public Interval  saveInterval(@PathVariable String userId, @PathVariable String activityId, @RequestBody Interval interval) {
-       User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")); 
-       Activity activity = user.getActivities().stream()
-       .filter(act ->  activityId.equals(act.getId()))
-       .findFirst() 
-       .orElseThrow(()-> new IllegalArgumentException("Activity not found"));
-
-       List<Interval> intervals = activity.getIntervals();
-       if (intervals == null) {
-           throw new IllegalArgumentException("Activity intervals list is null");
-       }
-
-       activity.addInterval(interval);
-       userRepository.save(user);
-
-       return interval;
-     }
+  
     
      @PatchMapping("/user/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody User userUpdates) {
@@ -126,7 +136,24 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
         }
     }
 
-   
+    @PatchMapping("/user/{userId}/activities/{activityId}/intervals")
+    public Interval  saveInterval(@PathVariable String userId, @PathVariable String activityId, @RequestBody Interval interval) {
+      User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")); 
+      Activity activity = user.getActivities().stream()
+      .filter(act ->  activityId.equals(act.getId()))
+      .findFirst() 
+      .orElseThrow(()-> new IllegalArgumentException("Activity not found"));
+
+      List<Interval> intervals = activity.getIntervals();
+      if (intervals == null) {
+          throw new IllegalArgumentException("Activity intervals list is null");
+      }
+
+      activity.addInterval(interval);
+      userRepository.save(user);
+
+      return interval;
+    }
 
 }
 
