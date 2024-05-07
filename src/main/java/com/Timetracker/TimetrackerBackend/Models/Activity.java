@@ -17,6 +17,7 @@ public class Activity {
     private String name;
     private List<Interval> intervals;
   
+  
 
     public Activity() {
         
@@ -27,6 +28,8 @@ public class Activity {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.intervals = new ArrayList<>();
+       
+     
     }
     public void addInterval(Interval interval) {
         if (intervals == null) {
@@ -34,6 +37,8 @@ public class Activity {
         }
         intervals.add(interval);
     }
+
+ 
     public String getId() {
         return id;
     }
@@ -57,16 +62,14 @@ public class Activity {
     public List<Interval> getIntervals() {
         return intervals;
     }
-
-
     public void setIntervals(List<Interval> intervals) {
         this.intervals = intervals;
+        
     }
 
     
 
 
-  
 
        
 }
