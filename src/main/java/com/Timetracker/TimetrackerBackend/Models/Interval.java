@@ -78,9 +78,10 @@ public class Interval {
 
     private void calculateDuration() {
         Duration duration = Duration.between(startTime, endTime);
-        this.seconds = duration.getSeconds();
-        this.minutes = duration.toMinutes();
         this.hours = duration.toHours();
+        this.minutes = duration.toMinutesPart(); // Extracts the minute-of-hour field.
+        this.seconds = duration.toSecondsPart(); // Extracts the second-of-minute field.
     }
+    
     
 }
