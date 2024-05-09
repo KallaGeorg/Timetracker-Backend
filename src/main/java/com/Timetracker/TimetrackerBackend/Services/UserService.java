@@ -4,6 +4,8 @@ import java.util.List;
 
 
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 
@@ -46,6 +48,11 @@ public class UserService {
     public User updateUser(User updatedUser){
         return userRepository.save(updatedUser);
 
+    }
+    public void deleteActivity(String userId, String activityId) {
+        Query query = Query.query(Criteria.where("userId").is(userId).and("activityId").is(activityId));
+        mongoOperations.remove(query, User.class);
+        
     }
   
 }

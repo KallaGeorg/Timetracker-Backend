@@ -1,5 +1,6 @@
 package com.Timetracker.TimetrackerBackend.Controllers;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,11 +76,10 @@ public ResponseEntity<Object> getActivityIntervalsSum(@PathVariable String userI
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Activity not found"));
 
-        long totalMilliseconds = activity.getIntervals().stream()
-                .mapToLong(interval -> interval.getHours() * 3600000L + interval.getMinutes() * 60000L + interval.getSeconds() * 1000L)
+        long totalSeconds = activity.getIntervals().stream()
+                .mapToLong(interval -> interval.getHours() * 3600L + interval.getMinutes() * 60L + interval.getSeconds())
                 .sum();
 
-        long totalSeconds = totalMilliseconds / 1000;
         long totalMinutes = totalSeconds / 60;
         long totalHours = totalMinutes / 60;
 
@@ -87,8 +88,8 @@ public ResponseEntity<Object> getActivityIntervalsSum(@PathVariable String userI
 
         ActivitySumResponse activitySumResponse = new ActivitySumResponse();
         activitySumResponse.setActivityName(activity.getName());
-        activitySumResponse.setSumHours(totalHours/3);
-        activitySumResponse.setSumMinutes(totalMinutes/2);
+        activitySumResponse.setSumHours(totalHours);
+        activitySumResponse.setSumMinutes(totalMinutes);
         activitySumResponse.setSumSeconds(totalSeconds);
 
         return ResponseEntity.ok(activitySumResponse);
@@ -160,8 +161,15 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
             if (userUpdates.getLastname() != null) {
                 existingUser.setLastname(userUpdates.getLastname());
             }
+           
             if (userUpdates.getActivities() != null) {
-                existingUser.setActivities(userUpdates.getActivities());
+                List<Activity> exsistingActivities = existingUser.getActivities();
+                if(exsistingActivities == null){
+                    exsistingActivities = new ArrayList<>();
+                }
+                List<Activity> updatedActivities = new ArrayList<>(exsistingActivities);
+                updatedActivities.addAll(userUpdates.getActivities());
+                existingUser.setActivities(updatedActivities);
             }
            
             User updatedUser = userService.updateUser(existingUser);
@@ -173,6 +181,7 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update user");
         }
     }
+    
 
     @PatchMapping("/user/{userId}/activities/{activityId}/intervals")
     public Interval  saveInterval(@PathVariable String userId, @PathVariable String activityId, @RequestBody Interval interval) {
@@ -193,6 +202,33 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
 
       return interval;
     }
+    @DeleteMapping("/user/{userId}/activities/{activityId}")
+    public ResponseEntity<String> deleteActivity(@PathVariable String userId, @PathVariable String activityId) {
+        try {
+            User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            List<Activity> activities = user.getActivities();
+            if (activities == null) {
+                return ResponseEntity.notFound().build();
+            }
+    
+            boolean activityRemoved = activities.removeIf(activity -> activityId.equals(activity.getId()));
+            if (!activityRemoved) {
+                return ResponseEntity.notFound().build();
+            }
+    
+            userRepository.save(user);
+            updateAdminUsers();
+    
+            return ResponseEntity.ok("Activity deleted successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete activity");
+        }
+    }
+    
+
+
 
 }
 
