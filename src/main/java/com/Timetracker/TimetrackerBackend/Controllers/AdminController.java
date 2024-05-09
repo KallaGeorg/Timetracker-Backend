@@ -1,6 +1,6 @@
 package com.Timetracker.TimetrackerBackend.Controllers;
 
-import java.util.List;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.Timetracker.TimetrackerBackend.Models.Admin;
 import com.Timetracker.TimetrackerBackend.Models.AdminLoginRequest;
-import com.Timetracker.TimetrackerBackend.Models.User;
+
 import com.Timetracker.TimetrackerBackend.Services.AdminService;
 
 

@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 
 
 import com.Timetracker.TimetrackerBackend.Models.Admin;
-import com.Timetracker.TimetrackerBackend.Models.User;
 import com.Timetracker.TimetrackerBackend.Repositories.AdminRepository;
-import com.Timetracker.TimetrackerBackend.Repositories.UserRepository;
+
 
 @Service
 
@@ -19,8 +18,7 @@ public class AdminService {
     public AdminService(MongoOperations mongoOperations) {
         this.mongoOperations = mongoOperations;
     }
-    @Autowired
-    private UserRepository userRepository;
+    
 
     @Autowired
     private AdminRepository adminRepository;
