@@ -2,6 +2,7 @@ package com.Timetracker.TimetrackerBackend.Models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -10,8 +11,8 @@ public class Interval {
 
     @Id
     private String id;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private String startTime;
+    private String endTime;
     private long seconds;
     private long minutes;
     private long hours; 
@@ -20,7 +21,7 @@ public class Interval {
 
     }
 
-    public Interval(LocalDateTime startTime, LocalDateTime endTime) {
+    public Interval(String startTime, String endTime) {
         this.id = UUID.randomUUID().toString();
         this.startTime = startTime;
         this.endTime = endTime;
@@ -36,19 +37,19 @@ public class Interval {
         this.id = id;
     }
 
-    public LocalDateTime getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 
@@ -76,13 +77,22 @@ public class Interval {
         this.hours = hours;
     }
 
-    private void calculateDuration() {
-        Duration duration = Duration.between(startTime, endTime);
-        this.hours = duration.toHours();
-        long remainingSeconds = duration.getSeconds() - (this.hours * 3600);
-        this.minutes = remainingSeconds / 60;
-        this.seconds = remainingSeconds % 60;
+ 
+   private void calculateDuration() {
+        try {
+            LocalDateTime start = LocalDateTime.parse(startTime);
+            LocalDateTime end = LocalDateTime.parse(endTime);
+        
+            Duration duration = Duration.between(start, end);
+            this.hours = duration.toHours();
+            long remainingSeconds = duration.getSeconds() - (this.hours * 3600);
+            this.minutes = remainingSeconds / 60;
+            this.seconds = remainingSeconds % 60;
+        } catch (DateTimeParseException e) {
+            
+            System.err.println("Error parsing date-time: " + e.getMessage());
+            
+        }
     }
-    
     
 }

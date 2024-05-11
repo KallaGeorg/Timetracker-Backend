@@ -227,6 +227,21 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
         }
     }
     
+    @DeleteMapping("/user/{userId}")
+public ResponseEntity<String> deleteUser(@PathVariable String userId) {
+    try {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            userRepository.deleteById(userId);
+            updateAdminUsers();
+            return ResponseEntity.ok("User deleted successfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete user");
+    }
+}
 
 
 
