@@ -29,9 +29,15 @@ public class UserService {
     public List<User> getUsers() {
         return mongoOperations.findAll(User.class);
     }
+    public boolean isUsernameUnique(String username) {
+        return userRepository.findByUsername(username) == null;
+    }
 
-    public User addUser(User user){
-        return mongoOperations.insert(user);
+    public User addUser(User user) throws Exception {
+        if (!isUsernameUnique(user.getUsername())) {
+            throw new Exception("Username already exists");
+        }
+        return userRepository.save(user);
     }
 
     public User getUserByUsernameAndPassword(String username, String password) {

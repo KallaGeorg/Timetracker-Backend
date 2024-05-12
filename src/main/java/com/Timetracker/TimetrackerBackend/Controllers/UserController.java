@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.Timetracker.TimetrackerBackend.Models.Activity;
 import com.Timetracker.TimetrackerBackend.Models.ActivitySumResponse;
-import com.Timetracker.TimetrackerBackend.Models.Admin;
 import com.Timetracker.TimetrackerBackend.Models.Interval;
 import com.Timetracker.TimetrackerBackend.Models.User;
 import com.Timetracker.TimetrackerBackend.Models.UserLoginRequest;
@@ -49,10 +48,10 @@ public class UserController {
         return "{'Hello': 'Timetracker'}";
     }
 
-    @GetMapping("/users")
-    public List<User> getUsers() {
-        return userService.getUsers();
-    }
+    // @GetMapping("/users")
+    // public List<User> getUsers() {
+    //     return userService.getUsers();
+    // }
     @GetMapping("/user/{userId}/activities")
     public List<Activity> getUserActivities(@PathVariable String userId) {
        Optional<User> userOptional = userRepository.findById(userId);
@@ -101,13 +100,17 @@ public ResponseEntity<Object> getActivityIntervalsSum(@PathVariable String userI
 
     
 
-    @PostMapping("/user")
-    public User addUser(@RequestBody User user) {
-        updateAdminUsers();
-        return userService.addUser(user);
-        
+@PostMapping("/user")
+public ResponseEntity<Object> addUser(@RequestBody User user) {
+    try {
+        User newUser = userService.addUser(user);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    } catch (Exception ex) {
+        String errorMessage = "Username already exists";
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
-   
+}
+ 
 
 @PostMapping("/user/login")
 public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
@@ -122,29 +125,7 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
     }
 }
 
-@PostMapping("/updateAdminUsers")
-  public ResponseEntity<String> updateAdminUsers(){
-    try{
-        List<User> users = userRepository.findAll();
-        if(users == null || users.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users found");
-        }
-        Admin admin = adminRepository.findByName("Admin");
 
-        if(admin != null){
-            admin.setUsers(users);
-            adminRepository.save(admin);
-    
-            return ResponseEntity.ok("Admin users updated");
-
-        }else{
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin document not found");}
-
-       
-    }catch(Exception e){
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update admin users");
-    }
-  }
     
      @PatchMapping("/user/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody User userUpdates) {
@@ -173,7 +154,7 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
             }
            
             User updatedUser = userService.updateUser(existingUser);
-            updateAdminUsers();
+            
             return ResponseEntity.ok(updatedUser);
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User with the provided ID already exists");
@@ -198,7 +179,7 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
 
       activity.addInterval(interval);
       userRepository.save(user);
-      updateAdminUsers();
+      
 
       return interval;
     }
@@ -217,7 +198,7 @@ public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
             }
     
             userRepository.save(user);
-            updateAdminUsers();
+            
     
             return ResponseEntity.ok("Activity deleted successfully");
         } catch (IllegalArgumentException e) {
@@ -233,7 +214,7 @@ public ResponseEntity<String> deleteUser(@PathVariable String userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             userRepository.deleteById(userId);
-            updateAdminUsers();
+        
             return ResponseEntity.ok("User deleted successfully");
         } else {
             return ResponseEntity.notFound().build();
