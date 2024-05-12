@@ -16,6 +16,7 @@ public class Activity {
     private String id;
     private String name;
     private List<Interval> intervals;
+    private long totalDuration;
   
   
 
@@ -36,8 +37,9 @@ public class Activity {
             intervals = new ArrayList<>();
         }
         intervals.add(interval);
+        
     }
-
+ 
  
     public String getId() {
         return id;
@@ -67,9 +69,16 @@ public class Activity {
         
     }
 
+
+    public long getTotalDuration() {
+        return totalDuration;
+    }
+
+
+    public void setTotalDuration(long totalDuration) {
+        this.totalDuration = totalDuration;
+    }
+
     
-
-
-
        
 }

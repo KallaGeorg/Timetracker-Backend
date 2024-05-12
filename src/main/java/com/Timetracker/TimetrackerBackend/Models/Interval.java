@@ -15,7 +15,9 @@ public class Interval {
     private String endTime;
     private long seconds;
     private long minutes;
-    private long hours; 
+    private long hours;
+  
+   
     
     public Interval(){
 
@@ -76,23 +78,28 @@ public class Interval {
     public void setHours(long hours) {
         this.hours = hours;
     }
+  
 
  
-   private void calculateDuration() {
+    public void calculateDuration() {
         try {
             LocalDateTime start = LocalDateTime.parse(startTime);
             LocalDateTime end = LocalDateTime.parse(endTime);
-        
+
             Duration duration = Duration.between(start, end);
-            this.hours = duration.toHours();
-            long remainingSeconds = duration.getSeconds() - (this.hours * 3600);
-            this.minutes = remainingSeconds / 60;
-            this.seconds = remainingSeconds % 60;
+            long totalSeconds = duration.getSeconds();
+            this.hours = totalSeconds / 3600;
+            long remainingSecondsAfterHours = totalSeconds % 3600;
+            this.minutes = remainingSecondsAfterHours / 60;
+            this.seconds = remainingSecondsAfterHours % 60;
+
         } catch (DateTimeParseException e) {
-            
             System.err.println("Error parsing date-time: " + e.getMessage());
             
+            this.hours = 0;
+            this.minutes = 0;
+            this.seconds = 0;
         }
     }
-    
+   
 }
