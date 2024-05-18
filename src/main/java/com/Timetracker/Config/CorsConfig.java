@@ -9,7 +9,7 @@ public class CorsConfig implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://seashell-app-k8vgq.ondigitalocean.app")
+                .allowedOrigins("https://monkfish-app-8ednv.ondigitalocean.app")
                 .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
                 .allowedHeaders("*");
                 
