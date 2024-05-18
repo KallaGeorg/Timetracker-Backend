@@ -26,7 +26,7 @@ import com.Timetracker.TimetrackerBackend.Models.UserLoginRequest;
 import com.Timetracker.TimetrackerBackend.Repositories.AdminRepository;
 import com.Timetracker.TimetrackerBackend.Repositories.UserRepository;
 import com.Timetracker.TimetrackerBackend.Services.UserService;
-@CrossOrigin(origins="*")
+@CrossOrigin(origins="https://monkfish-app-8ednv.ondigitalocean.app")
 @RestController
 public class UserController {
 
