@@ -62,10 +62,10 @@ public class AdminController {
     @PostMapping("/admin/login")
 public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
     
-    User user = userService.getUserByUserName(loginRequest.getUsername());
+    Admin admin = adminService.getAdminByName(loginRequest.getUsername());
 
-    if(user != null && user.getPassword().equals(loginRequest.getPassword())){
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    if(admin != null && admin.getPassword().equals(loginRequest.getPassword())){
+        return new ResponseEntity<>(admin, HttpStatus.OK);
 
     } else {
         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
