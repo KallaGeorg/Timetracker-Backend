@@ -45,13 +45,10 @@ public class UserController {
 
     @GetMapping()
     private String getRoot(){
-        return "{'Hello': 'Timetracker'}";
+        return "{'Hello': 'Timetracker Testing'}";  
     }
 
-    // @GetMapping("/users")
-    // public List<User> getUsers() {
-    //     return userService.getUsers();
-    // }
+   
     @GetMapping("/user/{userId}/activities")
     public List<Activity> getUserActivities(@PathVariable String userId) {
        Optional<User> userOptional = userRepository.findById(userId);
