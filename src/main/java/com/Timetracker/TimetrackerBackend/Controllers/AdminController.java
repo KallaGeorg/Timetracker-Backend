@@ -3,20 +3,21 @@ package com.Timetracker.TimetrackerBackend.Controllers;
 
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 import com.Timetracker.TimetrackerBackend.Models.Admin;
-import com.Timetracker.TimetrackerBackend.Models.AdminLoginRequest;
+
 import com.Timetracker.TimetrackerBackend.Models.User;
 import com.Timetracker.TimetrackerBackend.Services.AdminService;
 import com.Timetracker.TimetrackerBackend.Services.UserService;
@@ -44,16 +45,20 @@ public class AdminController {
     public Admin addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     } 
-   @PostMapping("/admin/login")
-public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) {
-    Admin admin = adminService.getAdminByName(username);
-
-    if (admin != null && admin.getPassword().equals(password)) {
-        return new ResponseEntity<>(admin, HttpStatus.OK);
-    } else {
-        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+    @PostMapping("/admin/login")
+    public ResponseEntity<Object> login(@RequestBody Map<String, String> loginRequest) {
+        String username = loginRequest.get("username");
+        String password = loginRequest.get("password");
+        
+        Admin admin = adminService.getAdminByName(username);
+    
+        if (admin != null && admin.getPassword().equals(password)) {
+            return new ResponseEntity<>(admin, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
     }
-}
+    
 
  @GetMapping("/admin")
     public Admin getAdmin() {
