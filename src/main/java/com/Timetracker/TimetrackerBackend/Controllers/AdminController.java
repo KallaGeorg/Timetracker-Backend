@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RestController;
 import com.Timetracker.TimetrackerBackend.Models.Admin;
-
+import com.Timetracker.TimetrackerBackend.Models.AdminLoginRequest;
 import com.Timetracker.TimetrackerBackend.Models.User;
 import com.Timetracker.TimetrackerBackend.Models.UserLoginRequest;
 import com.Timetracker.TimetrackerBackend.Services.AdminService;
@@ -60,7 +60,7 @@ public class AdminController {
     //     }
     // }
     @PostMapping("/admin/login")
-public ResponseEntity<Object> login(@RequestBody UserLoginRequest loginRequest){
+public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
     
     User user = userService.getUserByUserName(loginRequest.getUsername());
 
