@@ -19,7 +19,7 @@ import com.Timetracker.TimetrackerBackend.Services.AdminService;
 import com.Timetracker.TimetrackerBackend.Services.UserService;
 
 
-@CrossOrigin(origins="*")
+@CrossOrigin(origins="https://monkfish-app-8ednv.ondigitalocean.app")
 @RestController
 public class AdminController {
     public AdminController() {
