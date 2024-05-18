@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.Timetracker.TimetrackerBackend.Models.Admin;
 import com.Timetracker.TimetrackerBackend.Models.AdminLoginRequest;
@@ -43,16 +44,17 @@ public class AdminController {
     public Admin addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     } 
-    @PostMapping(value="/admin/login", consumes = MediaType.APPLICATION_JSON_VALUE) 
-    public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
-        Admin admin = adminService.getAdminByName(loginRequest.getUsername());
+   @PostMapping("/admin/login")
+public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) {
+    Admin admin = adminService.getAdminByName(username);
 
-        if(admin != null && admin.getPassword().equals(loginRequest.getPassword()) && admin.getName().equals(loginRequest.getUsername())) {
-            return new ResponseEntity<>(admin, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-        }
+    if (admin != null && admin.getPassword().equals(password)) {
+        return new ResponseEntity<>(admin, HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
     }
+}
+
  @GetMapping("/admin")
     public Admin getAdmin() {
         return adminService.getAdmin();
