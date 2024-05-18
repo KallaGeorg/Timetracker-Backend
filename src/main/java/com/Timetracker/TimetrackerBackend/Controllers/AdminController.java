@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +43,7 @@ public class AdminController {
     public Admin addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     } 
-    @PostMapping("/admin/login")
+    @PostMapping(value="/admin/login", consumes = MediaType.APPLICATION_JSON_VALUE) 
     public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
         Admin admin = adminService.getAdminByName(loginRequest.getUsername());
 
