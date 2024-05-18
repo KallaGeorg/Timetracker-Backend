@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Import;
 
 import com.Timetracker.Config.CorsConfig;
 
-@SpringBootApplication
-@Import(CorsConfig.class)
+@SpringBootApplication @Import(CorsConfig.class)
 public class TimetrackerBackendApplication {
 
 	public static void main(String[] args) {
