@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.Timetracker.TimetrackerBackend.Models.Admin;
 import com.Timetracker.TimetrackerBackend.Models.AdminLoginRequest;
@@ -19,7 +20,7 @@ import com.Timetracker.TimetrackerBackend.Services.AdminService;
 import com.Timetracker.TimetrackerBackend.Services.UserService;
 
 
-@CrossOrigin(origins="https://monkfish-app-8ednv.ondigitalocean.app")
+@CrossOrigin(origins= "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.DELETE})
 @RestController
 public class AdminController {
     public AdminController() {
