@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import org.springframework.web.bind.annotation.RestController;
 import com.Timetracker.TimetrackerBackend.Models.Admin;
-import com.Timetracker.TimetrackerBackend.Models.AdminLoginRequest;
+
 import com.Timetracker.TimetrackerBackend.Models.User;
-import com.Timetracker.TimetrackerBackend.Models.UserLoginRequest;
+
 import com.Timetracker.TimetrackerBackend.Services.AdminService;
 import com.Timetracker.TimetrackerBackend.Services.UserService;
 
@@ -59,18 +59,7 @@ public class AdminController {
             return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
         }
     }
-//     @PostMapping("/admin/login")
-// public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
-    
-//     Admin admin = adminService.getAdminByName(loginRequest.getUsername());
 
-//     if(admin != null && admin.getPassword().equals(loginRequest.getPassword())){
-//         return new ResponseEntity<>(admin, HttpStatus.OK);
-
-//     } else {
-//         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-//     }
-// }
     
 
  @GetMapping("/admin")
