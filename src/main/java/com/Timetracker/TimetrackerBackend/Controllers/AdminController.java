@@ -46,31 +46,31 @@ public class AdminController {
     public Admin addAdmin(@RequestBody Admin admin) {
         return adminService.addAdmin(admin);
     } 
-    // @PostMapping("/admin/login")
-    // public ResponseEntity<Object> login(@RequestBody Map<String, String> loginRequest) {
-    //     String username = loginRequest.get("username");
-    //     String password = loginRequest.get("password");
-        
-    //     Admin admin = adminService.getAdminByName(username);
-    
-    //     if (admin != null && admin.getPassword().equals(password)) {
-    //         return new ResponseEntity<>(admin, HttpStatus.OK);
-    //     } else {
-    //         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-    //     }
-    // }
     @PostMapping("/admin/login")
-public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
+    public ResponseEntity<Object> login(@RequestBody Map<String, String> loginRequest) {
+        String username = loginRequest.get("name");
+        String password = loginRequest.get("password");
+        
+        Admin admin = adminService.getAdminByName(username);
     
-    Admin admin = adminService.getAdminByName(loginRequest.getUsername());
-
-    if(admin != null && admin.getPassword().equals(loginRequest.getPassword())){
-        return new ResponseEntity<>(admin, HttpStatus.OK);
-
-    } else {
-        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        if (admin != null && admin.getPassword().equals(password)) {
+            return new ResponseEntity<>(admin, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+        }
     }
-}
+//     @PostMapping("/admin/login")
+// public ResponseEntity<Object> login(@RequestBody AdminLoginRequest loginRequest){
+    
+//     Admin admin = adminService.getAdminByName(loginRequest.getUsername());
+
+//     if(admin != null && admin.getPassword().equals(loginRequest.getPassword())){
+//         return new ResponseEntity<>(admin, HttpStatus.OK);
+
+//     } else {
+//         return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+//     }
+// }
     
 
  @GetMapping("/admin")
