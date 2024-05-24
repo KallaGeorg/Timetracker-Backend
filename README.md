@@ -8,6 +8,12 @@ på grund av en nullpointerexception,på admindsidan som var lite krångligt att
 Man logga in med namn:'Admin' och lösenord:'Admin, som admin.
 En sak måste jag också lägga till: det finns ingen validering när man tar bort sitt konto, alltså spelar det ingen roll vad man skriver i formuläret.
 Jag hoppas att du läser det här, och tack igen att jag fick möjligheten att lösa ploblemet.
+Bara för säkerhetens skull:
+1.) Klicka Login
+2.) Registrera
+3.) Lägg till aktiviteter
+4.) Timetracking
+5.) Titta på statistik
 
 hälsningar
 Georg
